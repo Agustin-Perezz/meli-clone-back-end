@@ -1,0 +1,25 @@
+{
+  "name": "meli-resources-api",
+  "version": "1.0.0",
+  "description": "back-end que consume recursos de la api de mercadolibre",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "author": "Agustin Perez",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.16",
+    "supertest": "^6.2.3"
+  }
+}
