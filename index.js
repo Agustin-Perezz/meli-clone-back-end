@@ -9,6 +9,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3005;
 
+const whiteList = [ 'http://localhost:3000' ];
+
+app.use( cors({ origin: whiteList }))
 app.use( morgan('dev') );
 app.use( express.json() );
 

@@ -4,6 +4,17 @@ const searchResultsItem = require('./helpers/mapper/searchResultsItem');
 const searchResultsItems = require('./helpers/mapper/searchResultsItems');
 
 require('dotenv').config();
+
+// const { createClient } = require('redis');
+// const redisClient = createClient({
+//     url: process.env.REDIS_URL,
+// });
+
+// (async () => {
+//   // Connect to redis server
+//   await redisClient.connect();
+// })();
+
 const BASE_URL = process.env.BASE_URL;
 
 const getItems = async( req, res ) => {
@@ -15,7 +26,6 @@ const getItems = async( req, res ) => {
     const resp_items = await fetch( url );
 
     const filtered_data = await searchResultsItems( resp_items );
-    
     res.status(200).send( filtered_data );
     
   } catch (error) {
@@ -27,8 +37,8 @@ const getItem = async( req, res ) => {
   
   try {
     const { item_id } = req.params;
-
     const resp_item = await fetch(`${ BASE_URL }/items/${ item_id }`);
+    console.log(`${ BASE_URL }/items/${ item_id }`)
     const data_item = await resp_item.json();
     
     const [ seller_data, questions_data, description_data, reviews_data ] = await Promise.all([
