@@ -5,16 +5,9 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
 
   const { plain_text } = await description_data.json(); 
   const { seller_reputation, nickname } = await seller_data.json();
-  const { reviews: reviews_resp, rating_average, rating_levels } = await reviews_data.json();
+  const { reviews: reviews_resp, rating_average, rating_levels:rating } = await reviews_data.json();
   const { questions: data_questions } = await questions_data.json();
  
-  // const attributes = data_item.attributes.map(( at, index ) => {
-  //   groupAttributes.push({ 
-  //     name: at.name,
-  //     value: at.value_name,
-  //   });
-  // });
-
   let attributes = [];
   let groupAttributes = [];
   let maxSizeGroupAttributes = 4;
@@ -29,6 +22,8 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       groupAttributes = [];
     }
   }) 
+  const previewAttribute = attributes[0];
+  attributes.shift();
 
   const all_reviews = reviews_resp.map( review => {
     const date = transformDate( review.date_created );
@@ -42,10 +37,19 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       porcentage: review.rate,
     };
   });
-
+  const list = Object.values( rating );
+  list.reverse();
+  const total_reviews = list.reduce((a,b) => a+b, 0);
+  const rating_levels = list.map(( value => {
+    return { 
+      value,
+      porcentage_width: (( value * 100 ) / total_reviews).toFixed(2),
+    }
+  }));
+  
   const positive_reviews = all_reviews.filter( review => review.porcentage >= 3 );
   const negative_reviews = all_reviews.filter( review => review.porcentage < 3 );
-
+  const rating_average_fixed = rating_average.toFixed(1);
 
   let questions = [];
   if ( data_questions ) { 
@@ -59,20 +63,22 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
   const previewQuestion = questions[0];
   questions.shift();
 
-  const pictures = data_item.pictures.map( img => img.url );
+  let pictures = [];
+  data_item.pictures.forEach((img, index) => {
+    if ( index >= 8 ) { return; }
+    pictures.push( img.url )
+  });
   
   const description = plain_text.split('.').map( paragraph => paragraph += '.' );
+  description.pop();
   
   const transactions_total = formatPrice( seller_reputation.transactions.total ).toString().substring(1);
 
   const location = {
-    city: data_item.seller_address.search_location.city.name,
-    province: data_item.seller_address.search_location.state.name
+    city: data_item.seller_address.city.name,
+    province: data_item.seller_address.state.name,
   };
   
-  const previewAttribute = attributes[0];
-  attributes.shift();
-
   const images = {
     mercado_credit_url: 'https://http2.mlstatic.com/storage/logos-api-admin/51b446b0-571c-11e8-9a2d-4b2bd7b1bf77-m.svg',
     credit: [
@@ -123,8 +129,8 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       questions,
     },
     reviews: {
-      rating_average,
-      total_reviews: all_reviews.length,
+      rating_average_fixed,
+      total_reviews,
       rating_levels,
       list_reviews: {
         all_reviews,
@@ -133,4 +139,4 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       },
     },
   }
-}
+  }

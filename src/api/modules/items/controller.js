@@ -5,16 +5,6 @@ const searchResultsItems = require('./helpers/mapper/searchResultsItems');
 
 require('dotenv').config();
 
-// const { createClient } = require('redis');
-// const redisClient = createClient({
-//     url: process.env.REDIS_URL,
-// });
-
-// (async () => {
-//   // Connect to redis server
-//   await redisClient.connect();
-// })();
-
 const BASE_URL = process.env.BASE_URL;
 
 const getItems = async( req, res ) => {

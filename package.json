@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest"
+    "test": "jest --verbose --watch"
   },
   "author": "Agustin Perez",
   "license": "ISC",
@@ -14,8 +14,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "node-fetch": "^2.6.7",
-    "redis": "^4.0.0-rc.4"
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "jest": "^28.1.0",
