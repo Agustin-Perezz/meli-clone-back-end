@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "back-end que consume recursos de la api de mercadolibre",
   "main": "index.js",
-  "engines": {
-    "node": "v16.14.0"
-  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
@@ -18,6 +15,9 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": "v16.14.0"
   },
   "devDependencies": {
     "jest": "^28.1.0",

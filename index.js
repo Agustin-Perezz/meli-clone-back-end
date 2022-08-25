@@ -9,7 +9,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3005;
 
-const whiteList = [ 'http://localhost:3000' ];
+const whiteList = [ 'http://localhost:3000', 'http://localhost:3000', 'https://meli-backend-api.herokuapp.com/' ];
 
 app.use( cors({ origin: whiteList }))
 app.use( morgan('dev') );
