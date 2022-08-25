@@ -15,9 +15,9 @@ app.use( cors({ origin: whiteList }))
 app.use( morgan('dev') );
 app.use( express.json() );
 
-app.use( '/api', indexRouter );
-
 app.get( '/', (req,res) => res.send('Test meli-api.'));
+
+app.use( '/api', indexRouter );
 
 app.listen( PORT, () => {
   console.log(`App on port ${ PORT }`);
