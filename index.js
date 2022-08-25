@@ -4,10 +4,10 @@ const cors = require('cors');
 
 const indexRouter = require('./src/api/routes/index');
 
-require('dotenv').config();
+// require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3080;
 
 const whiteList = [ 'http://localhost:3000', 'http://localhost:3000', 'https://meli-backend-api.herokuapp.com/' ];
 
