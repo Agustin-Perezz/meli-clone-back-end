@@ -7,7 +7,7 @@ const indexRouter = require('./src/api/routes/index');
 const app = express();
 const PORT = process.env.PORT || 3080;
 
-const whiteList = [ 'http://localhost:3000', 'http://localhost:3000', 'https://meli-backend-api.herokuapp.com/' ];
+const whiteList = [ 'http://localhost:3000', 'https://agustin-perezz.github.io/', 'https://meli-backend-api.herokuapp.com/' ];
 
 app.use( cors({ origin: whiteList }))
 app.use( morgan('dev') );
