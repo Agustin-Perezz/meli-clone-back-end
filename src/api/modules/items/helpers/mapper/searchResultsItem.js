@@ -72,7 +72,8 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
   const description = plain_text.split('.').map( paragraph => paragraph += '.' );
   description.pop();
   
-  const transactions_total = formatPrice( seller_reputation.transactions.total ).toString().substring(1);
+  const format_id = data_item.currency_id === 'ARS' ? 'es-AR' : 'en-US';
+  const transactions_total = formatPrice( seller_reputation.transactions.total, data_item.currency_id, format_id ).toString().substring(1);
 
   const location = {
     city: data_item.seller_address.city.name,
@@ -99,16 +100,21 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
     ]
   };
 
+  let price = formatPrice(data_item.price ,data_item.currency_id, format_id);
+  let installaments = formatPrice(data_item.price / 12, data_item.currency_id, format_id);
+  if ( format_id === 'en-US' ) { price = price.slice(1); installaments = installaments.slice(1); }
+  
   return {
     basic_info: { 
       title: data_item.title,
       condition: data_item.condition === 'new' ? 'Nuevo' : 'Reacondicionado',
-      price: formatPrice(data_item.price),
-      installaments: formatPrice(data_item.price / 12),
+      price,
+      installaments,
       sold_quantity: data_item.sold_quantity,
       total_reviews: all_reviews.length,
       rating_average,
       free_shipping: data_item.shipping.free_shipping,
+      country_id: data_item.currency_id
     },
     pictures,
     seller: {
