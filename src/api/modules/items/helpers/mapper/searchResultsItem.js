@@ -25,7 +25,9 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
   const previewAttribute = attributes[0];
   attributes.shift();
 
-  const all_reviews = reviews_resp.map( review => {
+  let all_reviews, rating_levels, total_reviews;
+  if ( reviews_resp ) { 
+  all_reviews = reviews_resp.map( review => {
     const date = transformDate( review.date_created );
     return {
       title: review.title,
@@ -37,19 +39,23 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       porcentage: review.rate,
     };
   });
-  const list = Object.values( rating );
-  list.reverse();
-  const total_reviews = list.reduce((a,b) => a+b, 0);
-  const rating_levels = list.map(( value => {
-    return { 
-      value,
-      porcentage_width: (( value * 100 ) / total_reviews).toFixed(2),
-    }
-  }));
+    const list = Object.values( rating );
+    list.reverse();
+    total_reviews = list.reduce((a,b) => a+b, 0);
+    rating_levels = list.map(( value => {
+      return { 
+        value,
+        porcentage_width: (( value * 100 ) / total_reviews).toFixed(2),
+      }
+    }));
+}
   
-  const positive_reviews = all_reviews.filter( review => review.porcentage >= 3 );
-  const negative_reviews = all_reviews.filter( review => review.porcentage < 3 );
-  const rating_average_fixed = rating_average.toFixed(1);
+  let positive_reviews, negative_reviews, rating_average_fixed;
+  if ( all_reviews ) { 
+     positive_reviews = all_reviews.filter( review => review.porcentage >= 3 );
+     negative_reviews = all_reviews.filter( review => review.porcentage < 3 );
+     rating_average_fixed = rating_average.toFixed(1);
+  }
 
   let questions = [];
   if ( data_questions ) { 
@@ -111,8 +117,8 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       price,
       installaments,
       sold_quantity: data_item.sold_quantity,
-      total_reviews: all_reviews.length,
-      rating_average,
+      total_reviews: all_reviews ? all_reviews.length : 0,
+      rating_average: rating_average || 0,
       free_shipping: data_item.shipping.free_shipping,
       country_id: data_item.currency_id
     },
@@ -134,7 +140,7 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
       previewQuestion,
       questions,
     },
-    reviews: {
+    reviews: reviews_resp !== undefined && reviews_resp.length !== 0 ? {
       rating_average_fixed,
       total_reviews,
       rating_levels,
@@ -143,6 +149,6 @@ module.exports = searchResultsItem = async( seller_data, questions_data, descrip
         positive_reviews,
         negative_reviews
       },
-    },
+    } : null,
   }
   }
